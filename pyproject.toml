@@ -1,0 +1,25 @@
+[project]
+name = "thinking-support"
+version = "0.1.0"
+description = "思考方法をサポートするMCPサーバー（段階的思考、クリティカルシンキング、ロジカルシンキング）"
+authors = [
+    {name = "wate"}
+]
+dependencies = [
+    "mcp>=1.0.0",
+]
+requires-python = ">=3.10"
+
+[project.scripts]
+thinking-support = "thinking_support.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.21.0",
+    "mypy>=1.0.0",
+]
