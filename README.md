@@ -42,6 +42,47 @@ uv run thinking-support
 - `logical_build_argument`: 論理的な論証を構築
 - `logical_find_causality`: 原因と結果の関係を分析
 
+設定方法
+-------------------------
+
+### VSCode設定
+
+VSCodeでMCPサーバーとして使用するには、`.vscode/mcp.json`ファイルを作成：
+
+```json
+{
+  "servers": {
+    "thinking-support": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "thinking-support"],
+      "cwd": "/path/to/mcp-thinking-support"
+    }
+  }
+}
+```
+
+### Claude Desktop設定
+
+Claude Desktopで使用するには、設定ファイルに以下を追加：
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "thinking-support": {
+      "command": "uv",
+      "args": ["run", "thinking-support"],
+      "cwd": "/path/to/mcp-thinking-support"
+    }
+  }
+}
+```
+
+**注意**: `cwd`のパスは実際のプロジェクトディレクトリに変更してください。
+
 開発
 -------------------------
 
