@@ -55,7 +55,10 @@ VSCodeでMCPサーバーとして使用するには、`.vscode/mcp.json`ファ�
     "thinking-support": {
       "type": "stdio",
       "command": "uv",
-      "args": ["run", "thinking-support"],
+      "args": [
+        "run",
+        "thinking-support"
+      ],
       "cwd": "/path/to/mcp-thinking-support"
     }
   }
@@ -66,16 +69,20 @@ VSCodeでMCPサーバーとして使用するには、`.vscode/mcp.json`ファ�
 
 Claude Desktopで使用するには、設定ファイルに以下を追加：
 
-**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "thinking-support": {
       "command": "uv",
-      "args": ["run", "thinking-support"],
-      "cwd": "/path/to/mcp-thinking-support"
+      "args": [
+        "run",
+        "--directory",
+        "/path/to/mcp-thinking-support",
+        "thinking-support",
+      ],
     }
   }
 }
