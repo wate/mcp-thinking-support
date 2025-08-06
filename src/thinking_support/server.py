@@ -13,6 +13,7 @@ from .tools.stepwise import StepwiseThinking
 from .tools.critical import CriticalThinking  
 from .tools.logical import LogicalThinking
 from .tools.why_analysis import WhyAnalysis
+from .tools.mece import MECE
 
 # ログ設定
 logging.basicConfig(level=logging.INFO)
@@ -26,6 +27,7 @@ stepwise = StepwiseThinking()
 critical = CriticalThinking()
 logical = LogicalThinking()
 why_analysis = WhyAnalysis()
+mece = MECE()
 
 # ツール登録
 tools = [
@@ -208,6 +210,46 @@ tools = [
             "properties": {},
             "required": []
         }
+    ),
+    
+    # MECEツール
+    Tool(
+        name="mece_analyze_categories",
+        description="カテゴリのMECE分析を実行して重複や漏れを検証する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string",
+                    "description": "分析対象のトピック"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "分析するカテゴリのリスト"
+                }
+            },
+            "required": ["topic", "categories"]
+        }
+    ),
+    Tool(
+        name="mece_create_structure",
+        description="トピックに対するMECE構造を提案する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string",
+                    "description": "構造を作成したいトピック"
+                },
+                "framework": {
+                    "type": "string",
+                    "description": "使用するフレームワーク（auto, 4P, 3C, SWOT, 時系列, 内外など）",
+                    "default": "auto"
+                }
+            },
+            "required": ["topic"]
+        }
     )
 ]
 
@@ -263,6 +305,16 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[dict[st
             result = await why_analysis.get_analysis(arguments["analysis_id"])
         elif name == "why_analysis_list":
             result = await why_analysis.list_analyses()
+        elif name == "mece_analyze_categories":
+            result = await mece.analyze_categories(
+                arguments["topic"],
+                arguments["categories"]
+            )
+        elif name == "mece_create_structure":
+            result = await mece.create_mece_structure(
+                arguments["topic"],
+                arguments.get("framework", "auto")
+            )
         else:
             raise ValueError(f"不明なツール: {name}")
             
