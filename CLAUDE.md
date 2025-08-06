@@ -1,7 +1,7 @@
 プロジェクト概要
 ========================
 
-このプロジェクトは、5つの思考方法をサポートするMCPサーバーです
+このプロジェクトは、6つの思考方法をサポートするMCPサーバーです
 
 必須事項
 -------------------------
@@ -42,6 +42,13 @@
 - 4P、3C、SWOT等の既存フレームワークに基づく構造提案
 - 論理的な分類・整理による思考の構造化支援
 
+### 弁証法 (Dialectical Thinking)
+
+- テーゼ（正）、アンチテーゼ（反）、ジンテーゼ（合）の三段階思考プロセス
+- 対立する意見や立場の建設的な統合
+- 矛盾する立場の分析と高次の視点での解決策提案
+- 多面的思考による創造的問題解決
+
 技術仕様
 -------------------------
 
@@ -67,6 +74,13 @@ MCPツール一覧
 10. `why_analysis_list` - 全分析の一覧表示
 11. `mece_analyze_categories` - カテゴリのMECE分析
 12. `mece_create_structure` - MECE構造の提案
+13. `dialectical_start_process` - 弁証法プロセスの開始
+14. `dialectical_set_thesis` - テーゼ（正）の設定
+15. `dialectical_set_antithesis` - アンチテーゼ（反）の設定
+16. `dialectical_create_synthesis` - ジンテーゼ（合）の構築
+17. `dialectical_analyze_contradiction` - 矛盾分析と統合提案
+18. `dialectical_get_process` - プロセス状況の取得
+19. `dialectical_list_processes` - 全プロセスの一覧表示
 
 開発・テスト
 -------------------------
@@ -74,7 +88,7 @@ MCPツール一覧
 ### コマンド
 
 - `uv sync` - 依存関係インストール
-- `uv run pytest` - テスト実行（33テスト）
+- `uv run pytest` - テスト実行（74テスト）
 - `uv run thinking-support` - MCPサーバー起動
 - `uv run mypy src/` - 型チェック
 

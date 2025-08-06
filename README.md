@@ -3,13 +3,14 @@
 
 > **注記**: このリポジトリのすべてのコードはClaude Codeによって生成されました。
 
-5つの思考方法をサポートするMCPサーバーです
+6つの思考方法をサポートするMCPサーバーです
 
 - 段階的思考: 複雑な問題を段階的なステップに分解
 - クリティカルシンキング: 情報を批判的に分析・評価  
 - ロジカルシンキング: 論理的な論証構築と因果関係分析
 - 5Why分析: 根本原因を特定するための5回の「なぜ」の繰り返し
 - MECE分析: 相互排他性と網羅性の原則による論理的分類・整理
+- 弁証法: テーゼ、アンチテーゼ、ジンテーゼの三段階思考で矛盾を統合
 
 インストール
 -------------------------
@@ -55,6 +56,16 @@ uv run thinking-support
 
 - `mece_analyze_categories`: カテゴリのMECE原則適合性を分析
 - `mece_create_structure`: トピックに対するMECE構造を提案
+
+#### 弁証法
+
+- `dialectical_start_process`: 弁証法プロセスを開始
+- `dialectical_set_thesis`: テーゼ（正）の主張を設定
+- `dialectical_set_antithesis`: アンチテーゼ（反）の反対意見を設定
+- `dialectical_create_synthesis`: ジンテーゼ（合）の統合見解を構築
+- `dialectical_analyze_contradiction`: 矛盾する立場の分析と統合提案
+- `dialectical_get_process`: プロセス状況の確認
+- `dialectical_list_processes`: 全プロセスの一覧表示
 
 設定方法
 -------------------------

@@ -14,6 +14,7 @@ from .tools.critical import CriticalThinking
 from .tools.logical import LogicalThinking
 from .tools.why_analysis import WhyAnalysis
 from .tools.mece import MECE
+from .tools.dialectical import DialecticalThinking
 
 # ログ設定
 logging.basicConfig(level=logging.INFO)
@@ -28,6 +29,7 @@ critical = CriticalThinking()
 logical = LogicalThinking()
 why_analysis = WhyAnalysis()
 mece = MECE()
+dialectical = DialecticalThinking()
 
 # ツール登録
 tools = [
@@ -250,6 +252,139 @@ tools = [
             },
             "required": ["topic"]
         }
+    ),
+    
+    # 弁証法ツール
+    Tool(
+        name="dialectical_start_process",
+        description="弁証法的思考プロセスを開始する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string",
+                    "description": "弁証法的思考を適用したいトピックや問題"
+                },
+                "context": {
+                    "type": "string",
+                    "description": "背景情報や制約条件（オプション）"
+                }
+            },
+            "required": ["topic"]
+        }
+    ),
+    Tool(
+        name="dialectical_set_thesis",
+        description="弁証法プロセスのテーゼ（正）を設定する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "process_id": {
+                    "type": "string",
+                    "description": "弁証法プロセスのID"
+                },
+                "thesis": {
+                    "type": "string",
+                    "description": "テーゼ（初期の主張や立場）"
+                },
+                "evidence": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "テーゼを支持する根拠（オプション）"
+                }
+            },
+            "required": ["process_id", "thesis"]
+        }
+    ),
+    Tool(
+        name="dialectical_set_antithesis",
+        description="弁証法プロセスのアンチテーゼ（反）を設定する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "process_id": {
+                    "type": "string",
+                    "description": "弁証法プロセスのID"
+                },
+                "antithesis": {
+                    "type": "string",
+                    "description": "アンチテーゼ（テーゼに対する反対意見や課題）"
+                },
+                "evidence": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "アンチテーゼを支持する根拠（オプション）"
+                }
+            },
+            "required": ["process_id", "antithesis"]
+        }
+    ),
+    Tool(
+        name="dialectical_create_synthesis",
+        description="弁証法プロセスのジンテーゼ（合）を構築する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "process_id": {
+                    "type": "string",
+                    "description": "弁証法プロセスのID"
+                },
+                "synthesis": {
+                    "type": "string",
+                    "description": "ジンテーゼ（テーゼとアンチテーゼを統合した新たな見解）"
+                },
+                "reasoning": {
+                    "type": "string",
+                    "description": "統合の理由や論理（オプション）"
+                }
+            },
+            "required": ["process_id", "synthesis"]
+        }
+    ),
+    Tool(
+        name="dialectical_analyze_contradiction",
+        description="矛盾する立場を分析し、弁証法的統合を提案する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string",
+                    "description": "分析対象のトピック"
+                },
+                "position_a": {
+                    "type": "string",
+                    "description": "立場A"
+                },
+                "position_b": {
+                    "type": "string",
+                    "description": "立場B（Aと矛盾する立場）"
+                }
+            },
+            "required": ["topic", "position_a", "position_b"]
+        }
+    ),
+    Tool(
+        name="dialectical_get_process",
+        description="弁証法プロセスの現在の状況を取得する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "process_id": {
+                    "type": "string",
+                    "description": "弁証法プロセスのID"
+                }
+            },
+            "required": ["process_id"]
+        }
+    ),
+    Tool(
+        name="dialectical_list_processes",
+        description="すべての弁証法プロセスの一覧を取得する",
+        inputSchema={
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
     )
 ]
 
@@ -315,6 +450,39 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[dict[st
                 arguments["topic"],
                 arguments.get("framework", "auto")
             )
+        elif name == "dialectical_start_process":
+            result = await dialectical.start_dialectical_process(
+                arguments["topic"],
+                arguments.get("context")
+            )
+        elif name == "dialectical_set_thesis":
+            result = await dialectical.set_thesis(
+                arguments["process_id"],
+                arguments["thesis"],
+                arguments.get("evidence")
+            )
+        elif name == "dialectical_set_antithesis":
+            result = await dialectical.set_antithesis(
+                arguments["process_id"],
+                arguments["antithesis"],
+                arguments.get("evidence")
+            )
+        elif name == "dialectical_create_synthesis":
+            result = await dialectical.create_synthesis(
+                arguments["process_id"],
+                arguments["synthesis"],
+                arguments.get("reasoning")
+            )
+        elif name == "dialectical_analyze_contradiction":
+            result = await dialectical.analyze_contradiction(
+                arguments["topic"],
+                arguments["position_a"],
+                arguments["position_b"]
+            )
+        elif name == "dialectical_get_process":
+            result = await dialectical.get_process(arguments["process_id"])
+        elif name == "dialectical_list_processes":
+            result = await dialectical.list_processes()
         else:
             raise ValueError(f"不明なツール: {name}")
             
