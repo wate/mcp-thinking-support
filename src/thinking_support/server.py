@@ -12,6 +12,7 @@ from mcp.types import Tool
 from .tools.stepwise import StepwiseThinking
 from .tools.critical import CriticalThinking  
 from .tools.logical import LogicalThinking
+from .tools.why_analysis import WhyAnalysis
 
 # ログ設定
 logging.basicConfig(level=logging.INFO)
@@ -24,6 +25,7 @@ server = Server("thinking-support")
 stepwise = StepwiseThinking()
 critical = CriticalThinking()
 logical = LogicalThinking()
+why_analysis = WhyAnalysis()
 
 # ツール登録
 tools = [
@@ -141,6 +143,71 @@ tools = [
             },
             "required": ["situation"]
         }
+    ),
+    
+    # 5Why分析ツール
+    Tool(
+        name="why_analysis_start",
+        description="5Why分析を開始して根本原因を特定する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "problem": {
+                    "type": "string",
+                    "description": "分析したい問題や現象"
+                },
+                "context": {
+                    "type": "string", 
+                    "description": "問題の背景情報（オプション）"
+                }
+            },
+            "required": ["problem"]
+        }
+    ),
+    Tool(
+        name="why_analysis_add_answer",
+        description="5Why分析の質問に回答し、次のWhyを生成する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "analysis_id": {
+                    "type": "string",
+                    "description": "分析ID"
+                },
+                "level": {
+                    "type": "integer",
+                    "description": "回答するWhyのレベル（0から4）"
+                },
+                "answer": {
+                    "type": "string",
+                    "description": "質問への回答"
+                }
+            },
+            "required": ["analysis_id", "level", "answer"]
+        }
+    ),
+    Tool(
+        name="why_analysis_get",
+        description="5Why分析の現在の状況を取得する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "analysis_id": {
+                    "type": "string",
+                    "description": "分析ID"
+                }
+            },
+            "required": ["analysis_id"]
+        }
+    ),
+    Tool(
+        name="why_analysis_list",
+        description="すべての5Why分析の一覧を取得する",
+        inputSchema={
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
     )
 ]
 
@@ -181,6 +248,21 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[dict[st
                 arguments["situation"],
                 arguments.get("factors", [])
             )
+        elif name == "why_analysis_start":
+            result = await why_analysis.start_analysis(
+                arguments["problem"],
+                arguments.get("context")
+            )
+        elif name == "why_analysis_add_answer":
+            result = await why_analysis.add_answer(
+                arguments["analysis_id"],
+                arguments["level"],
+                arguments["answer"]
+            )
+        elif name == "why_analysis_get":
+            result = await why_analysis.get_analysis(arguments["analysis_id"])
+        elif name == "why_analysis_list":
+            result = await why_analysis.list_analyses()
         else:
             raise ValueError(f"不明なツール: {name}")
             
