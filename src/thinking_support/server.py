@@ -15,6 +15,7 @@ from .tools.logical import LogicalThinking
 from .tools.why_analysis import WhyAnalysis
 from .tools.mece import MECE
 from .tools.dialectical import DialecticalThinking
+from .tools.sequential import SequentialThinking
 
 # ログ設定
 logging.basicConfig(level=logging.INFO)
@@ -30,9 +31,85 @@ logical = LogicalThinking()
 why_analysis = WhyAnalysis()
 mece = MECE()
 dialectical = DialecticalThinking()
+sequential = SequentialThinking()
 
 # ツール登録
 tools = [
+    # 動的思考ツール（Sequential Thinking）
+    Tool(
+        name="sequential_thinking",
+        description="""動的で反省的な問題解決のための詳細ツール。
+柔軟な思考プロセスを通じて問題を分析し、理解が深まるにつれて適応・発展させることができます。
+各思考は、前の洞察に基づいて構築、質問、または修正することができます。
+
+使用場面:
+- 複雑な問題をステップに分解する
+- 修正の余地がある計画と設計
+- コース修正が必要になる可能性のある分析
+- 最初は全体像が明確でない問題
+- 複数ステップの解決が必要な問題
+- 複数のステップにわたってコンテキストを維持する必要があるタスク
+- 無関係な情報をフィルタリングする必要がある状況
+
+主な機能:
+- 進行に応じてtotal_thoughtsを上下に調整可能
+- 前の思考に疑問を持ったり修正したりできる
+- 終わりに達したと思われた後でも、さらに思考を追加できる
+- 不確実性を表現し、代替アプローチを探求できる
+- 思考は線形に構築する必要はない - 分岐や逆戻りが可能
+- 解決仮説の生成
+- 思考の連鎖ステップに基づく仮説の検証
+- 満足するまでプロセスを繰り返し
+- 正しい答えを提供
+""",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "thought": {
+                    "type": "string",
+                    "description": "現在の思考ステップ"
+                },
+                "next_thought_needed": {
+                    "type": "boolean",
+                    "description": "さらなる思考ステップが必要かどうか"
+                },
+                "thought_number": {
+                    "type": "integer",
+                    "description": "現在の思考番号",
+                    "minimum": 1
+                },
+                "total_thoughts": {
+                    "type": "integer",
+                    "description": "推定される必要な思考の総数",
+                    "minimum": 1
+                },
+                "is_revision": {
+                    "type": "boolean",
+                    "description": "これが前の思考を修正するものかどうか"
+                },
+                "revises_thought": {
+                    "type": "integer",
+                    "description": "再考されている思考の番号",
+                    "minimum": 1
+                },
+                "branch_from_thought": {
+                    "type": "integer",
+                    "description": "分岐点となる思考番号",
+                    "minimum": 1
+                },
+                "branch_id": {
+                    "type": "string",
+                    "description": "分岐識別子"
+                },
+                "needs_more_thoughts": {
+                    "type": "boolean",
+                    "description": "さらに思考が必要かどうか"
+                }
+            },
+            "required": ["thought", "next_thought_needed", "thought_number", "total_thoughts"]
+        }
+    ),
+    
     # 段階的思考ツール
     Tool(
         name="stepwise_create_plan",
@@ -483,6 +560,8 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[dict[st
             result = await dialectical.get_process(arguments["process_id"])
         elif name == "dialectical_list_processes":
             result = await dialectical.list_processes()
+        elif name == "sequential_thinking":
+            result = await sequential.process_thought(arguments)
         else:
             raise ValueError(f"不明なツール: {name}")
             

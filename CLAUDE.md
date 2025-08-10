@@ -1,7 +1,7 @@
 プロジェクト概要
 ========================
 
-このプロジェクトは、6つの思考方法をサポートするMCPサーバーです
+このプロジェクトは、7つの思考方法をサポートするMCPサーバーです
 
 必須事項
 -------------------------
@@ -10,6 +10,14 @@
 
 実装内容
 -------------------------
+
+### 動的思考 (Sequential Thinking)
+
+- 柔軟で反省的な問題解決プロセス
+- 思考の修正・リビジョン機能（前の思考を見直し修正）
+- 思考の分岐処理（複数のアプローチを並行探索）
+- 動的な思考数調整（進行中に必要な思考数を変更）
+- リアルタイムな視覚的フォーマット表示
 
 ### 段階的思考 (Stepwise Thinking)
 
@@ -62,25 +70,26 @@
 MCPツール一覧
 -------------------------
 
-1. `stepwise_create_plan` - 問題の段階的分解
-2. `stepwise_execute_step` - ステップ実行と記録
-3. `critical_analyze_claim` - 主張・情報の信頼性評価
-4. `critical_identify_bias` - バイアス・論理的誤謬の検出
-5. `logical_build_argument` - 論理的論証の構築
-6. `logical_find_causality` - 因果関係の分析
-7. `why_analysis_start` - 5Why分析の開始
-8. `why_analysis_add_answer` - Why質問への回答追加
-9. `why_analysis_get` - 分析状況の取得
-10. `why_analysis_list` - 全分析の一覧表示
-11. `mece_analyze_categories` - カテゴリのMECE分析
-12. `mece_create_structure` - MECE構造の提案
-13. `dialectical_start_process` - 弁証法プロセスの開始
-14. `dialectical_set_thesis` - テーゼ（正）の設定
-15. `dialectical_set_antithesis` - アンチテーゼ（反）の設定
-16. `dialectical_create_synthesis` - ジンテーゼ（合）の構築
-17. `dialectical_analyze_contradiction` - 矛盾分析と統合提案
-18. `dialectical_get_process` - プロセス状況の取得
-19. `dialectical_list_processes` - 全プロセスの一覧表示
+1. `sequential_thinking` - 動的で反省的な思考プロセス
+2. `stepwise_create_plan` - 問題の段階的分解
+3. `stepwise_execute_step` - ステップ実行と記録
+4. `critical_analyze_claim` - 主張・情報の信頼性評価
+5. `critical_identify_bias` - バイアス・論理的誤謬の検出
+6. `logical_build_argument` - 論理的論証の構築
+7. `logical_find_causality` - 因果関係の分析
+8. `why_analysis_start` - 5Why分析の開始
+9. `why_analysis_add_answer` - Why質問への回答追加
+10. `why_analysis_get` - 分析状況の取得
+11. `why_analysis_list` - 全分析の一覧表示
+12. `mece_analyze_categories` - カテゴリのMECE分析
+13. `mece_create_structure` - MECE構造の提案
+14. `dialectical_start_process` - 弁証法プロセスの開始
+15. `dialectical_set_thesis` - テーゼ（正）の設定
+16. `dialectical_set_antithesis` - アンチテーゼ（反）の設定
+17. `dialectical_create_synthesis` - ジンテーゼ（合）の構築
+18. `dialectical_analyze_contradiction` - 矛盾分析と統合提案
+19. `dialectical_get_process` - プロセス状況の取得
+20. `dialectical_list_processes` - 全プロセスの一覧表示
 
 開発・テスト
 -------------------------
@@ -129,4 +138,5 @@ MCPツール一覧
 - 要求されたことのみを実行し、それ以上でもそれ以下でもない
 - 目標達成に絶対必要でない限り、新しいファイルは作成しない
 - 新規作成よりも既存ファイルの編集を優先する
-- ユーザーから明示的に要求されない限り、ドキュメントファイル(*.md)やREADMEファイルを積極的に作成しない
+- 機能の追加や更新があった場合は、必ずテストを追加し、全体のテストを実行する
+- 実装済みの機能がCLAUDE.mdおよびREADME.mdに正確に反映されていることを確認する
