@@ -1,7 +1,7 @@
 """MCPサーバーの統合テスト"""
 
 import pytest
-from thinking_support.server import server, stepwise, critical, logical
+from thinking_support.server import server, stepwise, critical, logical, scamper, why_analysis, mece, dialectical
 
 
 def test_server_initialization():
@@ -10,6 +10,10 @@ def test_server_initialization():
     assert stepwise is not None
     assert critical is not None
     assert logical is not None
+    assert scamper is not None
+    assert why_analysis is not None
+    assert mece is not None
+    assert dialectical is not None
 
 
 def test_expected_tools():
@@ -20,10 +24,20 @@ def test_expected_tools():
         "critical_analyze_claim",
         "critical_identify_bias",
         "logical_build_argument",
-        "logical_find_causality"
+        "logical_find_causality",
+        "why_analysis_start",
+        "why_analysis_add_answer",
+        "mece_analyze_categories",
+        "mece_create_structure",
+        "dialectical_start_process",
+        "dialectical_set_thesis",
+        "scamper_start_session",
+        "scamper_apply_technique",
+        "scamper_evaluate_ideas",
+        "scamper_generate_comprehensive"
     ]
     # 実際のツール呼び出しテストは個別のツールテストで行う
-    assert len(expected_tools) == 6
+    assert len(expected_tools) >= 16  # 最低16個のツール
 
 
 @pytest.mark.asyncio 
@@ -71,9 +85,74 @@ async def test_logical_integration():
     assert "因果関係分析" in result2
 
 
+@pytest.mark.asyncio
+async def test_scamper_integration():
+    """SCAMPER法の統合テスト"""
+    # セッション開始
+    result1 = await scamper.start_session(
+        "新製品アイデア", 
+        "既存製品の改良が必要",
+        "限られた予算内で"
+    )
+    assert "SCAMPERセッション開始" in result1
+    
+    # セッションIDを取得
+    session_id = list(scamper.sessions.keys())[0]
+    
+    # 技法適用
+    result2 = await scamper.apply_technique(
+        session_id,
+        "substitute",
+        ["材料を代替品に変更", "製造プロセスを自動化に代替"],
+        ["コスト削減効果", "効率化による品質向上"]
+    )
+    assert "Substitute技法の適用結果" in result2
+    
+    # アイデア評価
+    evaluations = [
+        {"idea": "材料を代替品に変更", "feasibility": 8, "impact": 6},
+        {"idea": "製造プロセスを自動化に代替", "feasibility": 5, "impact": 9}
+    ]
+    result3 = await scamper.evaluate_ideas(session_id, evaluations)
+    assert "アイデア評価結果" in result3
+    
+    # セッション状況確認
+    result4 = await scamper.get_session(session_id)
+    assert "SCAMPERセッション概要" in result4
+    assert "新製品アイデア" in result4
+
+
+@pytest.mark.asyncio
+async def test_scamper_comprehensive_integration():
+    """SCAMPER包括的アイデア生成の統合テスト"""
+    # 包括的アイデア生成
+    result = await scamper.generate_comprehensive_ideas(
+        "オンラインショッピング体験改善",
+        "顧客満足度とコンバージョン率の向上が必要",
+        "競合他社との差別化が急務"
+    )
+    
+    assert "SCAMPER包括的アイデア生成結果" in result
+    assert "オンラインショッピング体験改善" in result
+    assert "Substitute技法のアイデア" in result
+    assert "Combine技法のアイデア" in result
+    assert "生成統計" in result
+    
+    # セッションが作成されていることを確認
+    assert len(scamper.sessions) >= 1
+    
+    # 包括的セッションでは全技法のアイデアが生成されていることを確認
+    comprehensive_session = list(scamper.sessions.values())[-1]  # 最新のセッション
+    techniques_used = set(idea.technique for idea in comprehensive_session.ideas)
+    assert len(techniques_used) == 7  # 全7技法
+
+
 def test_tool_instances_are_separate():
     """ツールインスタンスの分離テスト"""
     # 各ツールが独立したインスタンスであることを確認
     assert id(stepwise) != id(critical)
     assert id(critical) != id(logical)
     assert id(stepwise) != id(logical)
+    assert id(scamper) != id(stepwise)
+    assert id(scamper) != id(critical)
+    assert id(scamper) != id(logical)

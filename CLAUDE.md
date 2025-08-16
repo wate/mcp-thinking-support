@@ -1,7 +1,7 @@
 プロジェクト概要
 ========================
 
-このプロジェクトは、7つの思考方法をサポートするMCPサーバーです
+このプロジェクトは、8つの思考方法をサポートするMCPサーバーです
 
 必須事項
 -------------------------
@@ -57,6 +57,13 @@
 - 矛盾する立場の分析と高次の視点での解決策提案
 - 多面的思考による創造的問題解決
 
+### SCAMPER法 (SCAMPER Method)
+
+- Substitute（代替）、Combine（結合）、Adapt（応用）、Modify（変更）、Put to other use（転用）、Eliminate（除去）、Reverse（逆転）の7つの技法
+- 創造的アイデア発想とイノベーション支援
+- 既存の概念・プロセス・製品の改良と新たな可能性の発見
+- 体系的な創造的思考プロセスによる問題解決とアイデア生成
+
 技術仕様
 -------------------------
 
@@ -90,6 +97,12 @@ MCPツール一覧
 18. `dialectical_analyze_contradiction` - 矛盾分析と統合提案
 19. `dialectical_get_process` - プロセス状況の取得
 20. `dialectical_list_processes` - 全プロセスの一覧表示
+21. `scamper_start_session` - SCAMPERセッションの開始
+22. `scamper_apply_technique` - 指定技法でのアイデア生成
+23. `scamper_evaluate_ideas` - アイデアの実現可能性・インパクト評価
+24. `scamper_get_session` - セッション状況の取得
+25. `scamper_list_sessions` - 全セッションの一覧表示
+26. `scamper_generate_comprehensive` - 全技法を適用した包括的アイデア生成
 
 開発・テスト
 -------------------------

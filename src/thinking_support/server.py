@@ -16,6 +16,7 @@ from .tools.why_analysis import WhyAnalysis
 from .tools.mece import MECE
 from .tools.dialectical import DialecticalThinking
 from .tools.sequential import SequentialThinking
+from .tools.scamper import SCAMPER
 
 # ログ設定
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +33,7 @@ why_analysis = WhyAnalysis()
 mece = MECE()
 dialectical = DialecticalThinking()
 sequential = SequentialThinking()
+scamper = SCAMPER()
 
 # ツール登録
 tools = [
@@ -462,6 +464,130 @@ tools = [
             "properties": {},
             "required": []
         }
+    ),
+    
+    # SCAMPERツール
+    Tool(
+        name="scamper_start_session",
+        description="SCAMPER創造的思考セッションを開始する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string",
+                    "description": "創造的思考を適用したいトピックや課題"
+                },
+                "current_situation": {
+                    "type": "string",
+                    "description": "現在の状況や問題の詳細"
+                },
+                "context": {
+                    "type": "string",
+                    "description": "背景情報や制約条件（オプション）"
+                }
+            },
+            "required": ["topic", "current_situation"]
+        }
+    ),
+    Tool(
+        name="scamper_apply_technique",
+        description="指定されたSCAMPER技法でアイデアを生成する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "session_id": {
+                    "type": "string",
+                    "description": "SCAMPERセッションのID"
+                },
+                "technique": {
+                    "type": "string",
+                    "description": "適用するSCAMPER技法（substitute/combine/adapt/modify/put_to_other_use/eliminate/reverse）"
+                },
+                "ideas": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "生成したアイデアのリスト"
+                },
+                "explanations": {
+                    "type": "array", 
+                    "items": {"type": "string"},
+                    "description": "各アイデアの説明（オプション）"
+                }
+            },
+            "required": ["session_id", "technique", "ideas"]
+        }
+    ),
+    Tool(
+        name="scamper_evaluate_ideas",
+        description="生成されたアイデアを実現可能性とインパクトで評価する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "session_id": {
+                    "type": "string",
+                    "description": "SCAMPERセッションのID"
+                },
+                "idea_evaluations": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "idea": {"type": "string"},
+                            "feasibility": {"type": "integer", "minimum": 0, "maximum": 10},
+                            "impact": {"type": "integer", "minimum": 0, "maximum": 10}
+                        },
+                        "required": ["idea", "feasibility", "impact"]
+                    },
+                    "description": "アイデア評価のリスト"
+                }
+            },
+            "required": ["session_id", "idea_evaluations"]
+        }
+    ),
+    Tool(
+        name="scamper_get_session",
+        description="SCAMPERセッションの現在の状況を取得する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "session_id": {
+                    "type": "string",
+                    "description": "SCAMPERセッションのID"
+                }
+            },
+            "required": ["session_id"]
+        }
+    ),
+    Tool(
+        name="scamper_list_sessions", 
+        description="すべてのSCAMPERセッションの一覧を取得する",
+        inputSchema={
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    ),
+    Tool(
+        name="scamper_generate_comprehensive",
+        description="全てのSCAMPER技法を適用して包括的なアイデアを生成する",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string",
+                    "description": "創造的思考を適用したいトピックや課題"
+                },
+                "current_situation": {
+                    "type": "string",
+                    "description": "現在の状況や問題の詳細"
+                },
+                "context": {
+                    "type": "string",
+                    "description": "背景情報や制約条件（オプション）"
+                }
+            },
+            "required": ["topic", "current_situation"]
+        }
     )
 ]
 
@@ -562,6 +688,34 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[dict[st
             result = await dialectical.list_processes()
         elif name == "sequential_thinking":
             result = await sequential.process_thought(arguments)
+        elif name == "scamper_start_session":
+            result = await scamper.start_session(
+                arguments["topic"],
+                arguments["current_situation"],
+                arguments.get("context")
+            )
+        elif name == "scamper_apply_technique":
+            result = await scamper.apply_technique(
+                arguments["session_id"],
+                arguments["technique"],
+                arguments["ideas"],
+                arguments.get("explanations")
+            )
+        elif name == "scamper_evaluate_ideas":
+            result = await scamper.evaluate_ideas(
+                arguments["session_id"],
+                arguments["idea_evaluations"]
+            )
+        elif name == "scamper_get_session":
+            result = await scamper.get_session(arguments["session_id"])
+        elif name == "scamper_list_sessions":
+            result = await scamper.list_sessions()
+        elif name == "scamper_generate_comprehensive":
+            result = await scamper.generate_comprehensive_ideas(
+                arguments["topic"],
+                arguments["current_situation"],
+                arguments.get("context")
+            )
         else:
             raise ValueError(f"不明なツール: {name}")
             

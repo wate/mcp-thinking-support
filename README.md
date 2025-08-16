@@ -3,7 +3,7 @@
 
 > **注記**: このリポジトリのすべてのコードはClaude Codeによって生成されました。
 
-7つの思考方法をサポートするMCPサーバーです
+8つの思考方法をサポートするMCPサーバーです
 
 - 動的思考: 柔軟で反省的な問題解決プロセス（修正・分岐機能付き）
 - 段階的思考: 複雑な問題を段階的なステップに分解
@@ -12,6 +12,7 @@
 - 5Why分析: 根本原因を特定するための5回の「なぜ」の繰り返し
 - MECE分析: 相互排他性と網羅性の原則による論理的分類・整理
 - 弁証法: テーゼ、アンチテーゼ、ジンテーゼの三段階思考で矛盾を統合
+- SCAMPER法: 7つの技法による創造的アイデア発想とイノベーション支援
 
 インストール
 -------------------------
@@ -75,6 +76,15 @@ uv run thinking-support
 - `dialectical_analyze_contradiction`: 矛盾する立場の分析と統合提案
 - `dialectical_get_process`: プロセス状況の確認
 - `dialectical_list_processes`: 全プロセスの一覧表示
+
+#### SCAMPER法
+
+- `scamper_start_session`: SCAMPERセッションの開始
+- `scamper_apply_technique`: 指定技法（Substitute/Combine/Adapt/Modify/Put to other use/Eliminate/Reverse）でのアイデア生成
+- `scamper_evaluate_ideas`: アイデアの実現可能性・インパクト評価
+- `scamper_get_session`: セッション状況の確認
+- `scamper_list_sessions`: 全セッションの一覧表示
+- `scamper_generate_comprehensive`: 全技法を適用した包括的アイデア生成
 
 設定方法
 -------------------------
