@@ -1,7 +1,7 @@
 プロジェクト概要
 ========================
 
-このプロジェクトは、8つの思考方法をサポートするMCPサーバーです
+このプロジェクトは、5つの汎用的思考プロセスをサポートするMCPサーバーです
 
 必須事項
 -------------------------
@@ -37,32 +37,12 @@
 - モーダス・ポネンス、三段論法等の論理構造分析
 - 因果関係と相関関係の区別・分析
 
-### 5Why分析 (Why Analysis)
-
-- 問題の根本原因を特定するための5回の「なぜ」の繰り返し
-- 段階的な質問と回答による原因の深掘り
-- 分析結果の要約と改善アクションの提案
-
-### MECE分析 (MECE Analysis)
-
-- Mutually Exclusive（相互排他性）とCollectively Exhaustive（網羅性）の原則
-- カテゴリの重複検出と漏れの特定
-- 4P、3C、SWOT等の既存フレームワークに基づく構造提案
-- 論理的な分類・整理による思考の構造化支援
-
 ### 弁証法 (Dialectical Thinking)
 
 - テーゼ（正）、アンチテーゼ（反）、ジンテーゼ（合）の三段階思考プロセス
 - 対立する意見や立場の建設的な統合
 - 矛盾する立場の分析と高次の視点での解決策提案
 - 多面的思考による創造的問題解決
-
-### SCAMPER法 (SCAMPER Method)
-
-- Substitute（代替）、Combine（結合）、Adapt（応用）、Modify（変更）、Put to other use（転用）、Eliminate（除去）、Reverse（逆転）の7つの技法
-- 創造的アイデア発想とイノベーション支援
-- 既存の概念・プロセス・製品の改良と新たな可能性の発見
-- 体系的な創造的思考プロセスによる問題解決とアイデア生成
 
 技術仕様
 -------------------------
@@ -84,25 +64,13 @@ MCPツール一覧
 5. `critical_identify_bias` - バイアス・論理的誤謬の検出
 6. `logical_build_argument` - 論理的論証の構築
 7. `logical_find_causality` - 因果関係の分析
-8. `why_analysis_start` - 5Why分析の開始
-9. `why_analysis_add_answer` - Why質問への回答追加
-10. `why_analysis_get` - 分析状況の取得
-11. `why_analysis_list` - 全分析の一覧表示
-12. `mece_analyze_categories` - カテゴリのMECE分析
-13. `mece_create_structure` - MECE構造の提案
-14. `dialectical_start_process` - 弁証法プロセスの開始
-15. `dialectical_set_thesis` - テーゼ（正）の設定
-16. `dialectical_set_antithesis` - アンチテーゼ（反）の設定
-17. `dialectical_create_synthesis` - ジンテーゼ（合）の構築
-18. `dialectical_analyze_contradiction` - 矛盾分析と統合提案
-19. `dialectical_get_process` - プロセス状況の取得
-20. `dialectical_list_processes` - 全プロセスの一覧表示
-21. `scamper_start_session` - SCAMPERセッションの開始
-22. `scamper_apply_technique` - 指定技法でのアイデア生成
-23. `scamper_evaluate_ideas` - アイデアの実現可能性・インパクト評価
-24. `scamper_get_session` - セッション状況の取得
-25. `scamper_list_sessions` - 全セッションの一覧表示
-26. `scamper_generate_comprehensive` - 全技法を適用した包括的アイデア生成
+8. `dialectical_start_process` - 弁証法プロセスの開始
+9. `dialectical_set_thesis` - テーゼ（正）の設定
+10. `dialectical_set_antithesis` - アンチテーゼ（反）の設定
+11. `dialectical_create_synthesis` - ジンテーゼ（合）の構築
+12. `dialectical_analyze_contradiction` - 矛盾分析と統合提案
+13. `dialectical_get_process` - プロセス状況の取得
+14. `dialectical_list_processes` - 全プロセスの一覧表示
 
 開発・テスト
 -------------------------
@@ -110,7 +78,7 @@ MCPツール一覧
 ### コマンド
 
 - `uv sync` - 依存関係インストール
-- `uv run pytest` - テスト実行（74テスト）
+- `uv run pytest` - テスト実行
 - `uv run thinking-support` - MCPサーバー起動
 - `uv run mypy src/` - 型チェック
 

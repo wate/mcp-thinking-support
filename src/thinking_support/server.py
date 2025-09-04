@@ -12,11 +12,8 @@ from mcp.types import Tool
 from .tools.stepwise import StepwiseThinking
 from .tools.critical import CriticalThinking  
 from .tools.logical import LogicalThinking
-from .tools.why_analysis import WhyAnalysis
-from .tools.mece import MECE
 from .tools.dialectical import DialecticalThinking
 from .tools.sequential import SequentialThinking
-from .tools.scamper import SCAMPER
 
 # ログ設定
 logging.basicConfig(level=logging.INFO)
@@ -29,11 +26,8 @@ server = Server("thinking-support")
 stepwise = StepwiseThinking()
 critical = CriticalThinking()
 logical = LogicalThinking()
-why_analysis = WhyAnalysis()
-mece = MECE()
 dialectical = DialecticalThinking()
 sequential = SequentialThinking()
-scamper = SCAMPER()
 
 # ツール登録
 tools = [
@@ -228,111 +222,6 @@ tools = [
         }
     ),
     
-    # 5Why分析ツール
-    Tool(
-        name="why_analysis_start",
-        description="5Why分析を開始して根本原因を特定する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "problem": {
-                    "type": "string",
-                    "description": "分析したい問題や現象"
-                },
-                "context": {
-                    "type": "string", 
-                    "description": "問題の背景情報（オプション）"
-                }
-            },
-            "required": ["problem"]
-        }
-    ),
-    Tool(
-        name="why_analysis_add_answer",
-        description="5Why分析の質問に回答し、次のWhyを生成する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "analysis_id": {
-                    "type": "string",
-                    "description": "分析ID"
-                },
-                "level": {
-                    "type": "integer",
-                    "description": "回答するWhyのレベル（0から4）"
-                },
-                "answer": {
-                    "type": "string",
-                    "description": "質問への回答"
-                }
-            },
-            "required": ["analysis_id", "level", "answer"]
-        }
-    ),
-    Tool(
-        name="why_analysis_get",
-        description="5Why分析の現在の状況を取得する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "analysis_id": {
-                    "type": "string",
-                    "description": "分析ID"
-                }
-            },
-            "required": ["analysis_id"]
-        }
-    ),
-    Tool(
-        name="why_analysis_list",
-        description="すべての5Why分析の一覧を取得する",
-        inputSchema={
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
-    ),
-    
-    # MECEツール
-    Tool(
-        name="mece_analyze_categories",
-        description="カテゴリのMECE分析を実行して重複や漏れを検証する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "topic": {
-                    "type": "string",
-                    "description": "分析対象のトピック"
-                },
-                "categories": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "分析するカテゴリのリスト"
-                }
-            },
-            "required": ["topic", "categories"]
-        }
-    ),
-    Tool(
-        name="mece_create_structure",
-        description="トピックに対するMECE構造を提案する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "topic": {
-                    "type": "string",
-                    "description": "構造を作成したいトピック"
-                },
-                "framework": {
-                    "type": "string",
-                    "description": "使用するフレームワーク（auto, 4P, 3C, SWOT, 時系列, 内外など）",
-                    "default": "auto"
-                }
-            },
-            "required": ["topic"]
-        }
-    ),
-    
     # 弁証法ツール
     Tool(
         name="dialectical_start_process",
@@ -464,130 +353,6 @@ tools = [
             "properties": {},
             "required": []
         }
-    ),
-    
-    # SCAMPERツール
-    Tool(
-        name="scamper_start_session",
-        description="SCAMPER創造的思考セッションを開始する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "topic": {
-                    "type": "string",
-                    "description": "創造的思考を適用したいトピックや課題"
-                },
-                "current_situation": {
-                    "type": "string",
-                    "description": "現在の状況や問題の詳細"
-                },
-                "context": {
-                    "type": "string",
-                    "description": "背景情報や制約条件（オプション）"
-                }
-            },
-            "required": ["topic", "current_situation"]
-        }
-    ),
-    Tool(
-        name="scamper_apply_technique",
-        description="指定されたSCAMPER技法でアイデアを生成する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "session_id": {
-                    "type": "string",
-                    "description": "SCAMPERセッションのID"
-                },
-                "technique": {
-                    "type": "string",
-                    "description": "適用するSCAMPER技法（substitute/combine/adapt/modify/put_to_other_use/eliminate/reverse）"
-                },
-                "ideas": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "生成したアイデアのリスト"
-                },
-                "explanations": {
-                    "type": "array", 
-                    "items": {"type": "string"},
-                    "description": "各アイデアの説明（オプション）"
-                }
-            },
-            "required": ["session_id", "technique", "ideas"]
-        }
-    ),
-    Tool(
-        name="scamper_evaluate_ideas",
-        description="生成されたアイデアを実現可能性とインパクトで評価する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "session_id": {
-                    "type": "string",
-                    "description": "SCAMPERセッションのID"
-                },
-                "idea_evaluations": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "idea": {"type": "string"},
-                            "feasibility": {"type": "integer", "minimum": 0, "maximum": 10},
-                            "impact": {"type": "integer", "minimum": 0, "maximum": 10}
-                        },
-                        "required": ["idea", "feasibility", "impact"]
-                    },
-                    "description": "アイデア評価のリスト"
-                }
-            },
-            "required": ["session_id", "idea_evaluations"]
-        }
-    ),
-    Tool(
-        name="scamper_get_session",
-        description="SCAMPERセッションの現在の状況を取得する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "session_id": {
-                    "type": "string",
-                    "description": "SCAMPERセッションのID"
-                }
-            },
-            "required": ["session_id"]
-        }
-    ),
-    Tool(
-        name="scamper_list_sessions", 
-        description="すべてのSCAMPERセッションの一覧を取得する",
-        inputSchema={
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
-    ),
-    Tool(
-        name="scamper_generate_comprehensive",
-        description="全てのSCAMPER技法を適用して包括的なアイデアを生成する",
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "topic": {
-                    "type": "string",
-                    "description": "創造的思考を適用したいトピックや課題"
-                },
-                "current_situation": {
-                    "type": "string",
-                    "description": "現在の状況や問題の詳細"
-                },
-                "context": {
-                    "type": "string",
-                    "description": "背景情報や制約条件（オプション）"
-                }
-            },
-            "required": ["topic", "current_situation"]
-        }
     )
 ]
 
@@ -628,31 +393,6 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[dict[st
                 arguments["situation"],
                 arguments.get("factors", [])
             )
-        elif name == "why_analysis_start":
-            result = await why_analysis.start_analysis(
-                arguments["problem"],
-                arguments.get("context")
-            )
-        elif name == "why_analysis_add_answer":
-            result = await why_analysis.add_answer(
-                arguments["analysis_id"],
-                arguments["level"],
-                arguments["answer"]
-            )
-        elif name == "why_analysis_get":
-            result = await why_analysis.get_analysis(arguments["analysis_id"])
-        elif name == "why_analysis_list":
-            result = await why_analysis.list_analyses()
-        elif name == "mece_analyze_categories":
-            result = await mece.analyze_categories(
-                arguments["topic"],
-                arguments["categories"]
-            )
-        elif name == "mece_create_structure":
-            result = await mece.create_mece_structure(
-                arguments["topic"],
-                arguments.get("framework", "auto")
-            )
         elif name == "dialectical_start_process":
             result = await dialectical.start_dialectical_process(
                 arguments["topic"],
@@ -688,34 +428,6 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[dict[st
             result = await dialectical.list_processes()
         elif name == "sequential_thinking":
             result = await sequential.process_thought(arguments)
-        elif name == "scamper_start_session":
-            result = await scamper.start_session(
-                arguments["topic"],
-                arguments["current_situation"],
-                arguments.get("context")
-            )
-        elif name == "scamper_apply_technique":
-            result = await scamper.apply_technique(
-                arguments["session_id"],
-                arguments["technique"],
-                arguments["ideas"],
-                arguments.get("explanations")
-            )
-        elif name == "scamper_evaluate_ideas":
-            result = await scamper.evaluate_ideas(
-                arguments["session_id"],
-                arguments["idea_evaluations"]
-            )
-        elif name == "scamper_get_session":
-            result = await scamper.get_session(arguments["session_id"])
-        elif name == "scamper_list_sessions":
-            result = await scamper.list_sessions()
-        elif name == "scamper_generate_comprehensive":
-            result = await scamper.generate_comprehensive_ideas(
-                arguments["topic"],
-                arguments["current_situation"],
-                arguments.get("context")
-            )
         else:
             raise ValueError(f"不明なツール: {name}")
             
